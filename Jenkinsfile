@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        jdk 'jdk1.8.0_351'
+        jdk 'JAVA_LOCAL'
     }
 
     environment{
