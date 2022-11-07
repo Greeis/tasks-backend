@@ -8,12 +8,12 @@ pipeline {
             }
         }
         stage('Unit Tests'){
+            environment{ mavenHome = tool 'MAVEN_LOCAL' }
             steps {
                 sh "${mavenHome}/mvn test"
             }
         }
         stage('Sonar Analysis'){
-            environment{ mavenHome = tool 'MAVEN_LOCAL' }
             environment{
                 scannerHome = tool 'SONAR_SCANNER'
             }
