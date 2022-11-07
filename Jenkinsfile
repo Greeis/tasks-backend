@@ -49,6 +49,23 @@ pipeline {
                     sh "${mavenHome}/bin/mvn test"
                 }
             }
-        }      
+        }
+        stage('Deploy Front'){
+            steps {
+                dir('front-end'){
+                    git branch: 'master', credentialsId: 'GitHubLogin', url: 'git@github.com:Greeis/tasks-frontend.git'
+                    sh "${mavenHome}/bin/mvn clean package"
+                    deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://localhost:8001/')], contextPath: 'tasks', war: 'target/tasks.war'
+                }
+            }
+        }
+        stage('Functional Tests'){
+            steps {
+                dir('api-test'){
+                    git branch: 'master', credentialsId: 'GitHubLogin', url: 'git@github.com:Greeis/tasks-funcional-tests.git'
+                    sh "${mavenHome}/bin/mvn test"
+                }
+            }
+        }   
     }
 }
