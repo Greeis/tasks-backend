@@ -8,12 +8,12 @@ pipeline {
 
         stage ('Build') {
             steps{
-                sh "${mavenHome}/mvn clean package -DskipTests=true"
+                sh "${mavenHome}/bin/mvn clean package -DskipTests=true"
             }
         }
         stage ('Unit Tests') {
             steps {
-                sh "${mavenHome}/mvn test"
+                sh "${mavenHome}/bin/mvn test"
             }
         }
         stage('Sonar Analysis'){
