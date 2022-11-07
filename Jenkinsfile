@@ -1,10 +1,11 @@
 pipeline {
     agent any
+    environment{
+        scannerHome = tool 'SONAR_SCANNER'
+        mavenHome = tool 'MAVEN_LOCAL'
+    }
     stages{
-        environment{
-            scannerHome = tool 'SONAR_SCANNER'
-            mavenHome = tool 'MAVEN_LOCAL'
-        }
+
         stage ('Build') {
             steps{
                 sh "${mavenHome}/mvn clean package -DskipTests=true"
