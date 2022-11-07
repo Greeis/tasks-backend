@@ -44,8 +44,10 @@ pipeline {
         }
         stage('API Tests'){
             steps {
-                git branch: 'main', credentialsId: 'GitHubLogin', url: 'git@github.com:Greeis/tasks-api-tests.git'
-                sh "${mavenHome}/bin/mvn test"
+                dir('api-test'){
+                    git branch: 'main', credentialsId: 'GitHubLogin', url: 'git@github.com:Greeis/tasks-api-tests.git'
+                    sh "${mavenHome}/bin/mvn test"
+                }
             }
         }      
     }
