@@ -4,6 +4,10 @@ pipeline {
         scannerHome = tool 'SONAR_SCANNER'
         mavenHome = tool 'MAVEN_LOCAL'
     }
+
+    tools {
+        jdk = tool 'JAVA_HOME'
+    }
     stages{
 
         stage ('Build') {
