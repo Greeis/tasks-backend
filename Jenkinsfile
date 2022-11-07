@@ -61,11 +61,16 @@ pipeline {
         }
         stage('Functional Tests'){
             steps {
-                dir('api-test'){
+                dir('funcional-test'){
                     git branch: 'master', credentialsId: 'GitHubLogin', url: 'git@github.com:Greeis/tasks-funcional-tests.git'
                     sh "${mavenHome}/bin/mvn test"
                 }
             }
         }   
+    }
+    post {
+        always {
+            juit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml, api-test/target/surefire-reports/*.xml, funcional-test/target/surefire-reports/*.xml, funcional-test/target/failsafe-reports/*.xml' 
+        }
     }
 }
