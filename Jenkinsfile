@@ -74,7 +74,15 @@ pipeline {
                 sh '/usr/local/bin/docker-compose build'
                 sh '/usr/local/bin/docker-compose up -d'
             }
-        }    
+        }
+        stage('Health Check'){
+            steps {
+                sleep(10)
+                dir('funcional-test'){
+                    sh 'mvn verify -Dskip.surefire.tests'
+                }
+            }
+        }     
     }
     post {
         always {
