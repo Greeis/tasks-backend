@@ -9,9 +9,7 @@ pipeline {
         scannerHome = tool 'SONAR_SCANNER'
         mavenHome = tool 'MAVEN_LOCAL'
     }
-        environment {
-        PATH = "$PATH:/usr/local/bin"
-    }
+
     stages{
 
         stage ('Build') {
