@@ -66,7 +66,13 @@ pipeline {
                     sh "${mavenHome}/bin/mvn test"
                 }
             }
-        }   
+        }
+        stage('Deploy Prod'){
+            steps {
+                sh 'docker-compose build'
+                sh 'docker-compose up'
+            }
+        }    
     }
     post {
         always {

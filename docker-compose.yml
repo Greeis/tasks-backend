@@ -1,84 +1,62 @@
 version: "3"
 services:
-  pg-tasks:
-    container_name: pg-tasks
+  db:
+    container_name: pg-prod
     image: postgres:9.6
-    ports:
-      - 5433:5432
-    environment: 
+    networks:
+      - prod_net_back
+    environment:
+      - POSTGRES_PASSWORD=passwd
       - POSTGRES_DB=tasks
-      - POSTGRES_PASSWORD=password
-  sonarqube:
-    container_name: sonar
-    # image: sonarqube:7.9.2-community
-    image: sonarqube:7.9.3-community
-    ports:
-      - "9000:9000"
-    networks:
-      - sonarnet
-    environment:
-      - sonar.jdbc.url=jdbc:postgresql://pg-sonar:5432/sonar
-    depends_on:
-      - pg-sonar
     volumes:
-      - sonarqube_conf:/opt/sonarqube/conf
-      - sonarqube_data:/opt/sonarqube/data
-      - sonarqube_extensions:/opt/sonarqube/extensions
-      - sonarqube_bundled-plugins:/opt/sonarqube/lib/bundled-plugins
-  pg-sonar:
-    container_name: pg-sonar
-    image: postgres:9.6
+      - prod_postgresql:/var/lib/postgresql
+      - prod_postgresql_data:/var/lib/postgresql/data
+
+  backend:
+    container_name: backend-prod
+    image: back_prod:build_${BUILD_NUMBER}
+    build:
+      context: .
+      args:
+        - WAR_FILE=target/tasks-backend.war
+        - CONTEXT=tasks-backend
     networks:
-      - sonarnet
+      - prod_net_back
+      - prod_net_front
+    #ports:
+    #  - 9998:8080
     environment:
-      - POSTGRES_USER=sonar
-      - POSTGRES_PASSWORD=sonar
-    volumes:
-      - postgresql:/var/lib/postgresql
-      - postgresql_data:/var/lib/postgresql/data
-  selenium-hub:
-    # image: selenium/hub:4.6.0
-    image: selenium/hub:3.141.59-zinc
-    container_name: selenium-hub
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWD=passwd
+      #- DATABASE_UPDATE=none
+    depends_on:
+      - db
+
+  frontend:
+    container_name: frontend-prod
+    image: front_prod:build_${BUILD_NUMBER}
+    build:
+        context: .
+        args:
+          - WAR_FILE=front-end/target/tasks.war
+          - CONTEXT=tasks
     networks:
-      - seleniumGrid
+      - prod_net_front
     ports:
-      - "4444:4444"
-  chrome:
-    # image: selenium/node-chrome:107.0.5304.87
-    image: selenium/node-chrome:3.141.59-zinc
-    container_name: Chrome-1
-    networks:
-      - seleniumGrid
-    depends_on:
-      - selenium-hub
+      - 9999:8080
     environment:
-      - HUB_HOST=selenium-hub
-      - HUB_PORT=4444
-      - NODE_MAX_INSTANCES=2
-      - NODE_MAX_SESSIONS=2
-  chrome2:
-    # image: selenium/node-chrome:107.0.5304.87
-    image: selenium/node-chrome:3.141.59-zinc
-    container_name: Chrome-2
-    networks:
-      - seleniumGrid
-    depends_on:
-      - selenium-hub
-    environment:
-      - HUB_HOST=selenium-hub
-      - HUB_PORT=4444
-      - NODE_MAX_INSTANCES=2
-      - NODE_MAX_SESSIONS=2
- 
+      - BACKEND_HOST=backend
+      - BACKEND_PORT=8080
+      - APP_VERSION=build_${BUILD_NUMBER}
+    #depends_on:
+    #  - backend
+
 networks:
-  sonarnet:
-  seleniumGrid:
- 
+  prod_net_front:
+  prod_net_back:
+
 volumes:
-  sonarqube_conf:
-  sonarqube_data:
-  sonarqube_extensions:
-  sonarqube_bundled-plugins:
-  postgresql:
-  postgresql_data:
+  prod_postgresql:
+  prod_postgresql_data:
