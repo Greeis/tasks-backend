@@ -9,6 +9,9 @@ pipeline {
         scannerHome = tool 'SONAR_SCANNER'
         mavenHome = tool 'MAVEN_LOCAL'
     }
+        environment {
+        PATH = "$PATH:/usr/local/bin"
+    }
     stages{
 
         stage ('Build') {
@@ -69,8 +72,8 @@ pipeline {
         }
         stage('Deploy Prod'){
             steps {
-                sh 'docker-compose build'
-                sh 'docker-compose up'
+                sh '/usr/bin/docker-compose build'
+                sh '/usr/bin/docker-compose up -d'
             }
         }    
     }
