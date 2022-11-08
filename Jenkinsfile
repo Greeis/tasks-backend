@@ -25,7 +25,7 @@ pipeline {
         stage('Sonar Analysis'){
             steps {
                 withSonarQubeEnv('SONAR_LOCAL') {
-                    sh "${scannerHome}/bin/sonar-scanner -e -Dsonar.projectKey=TestDeployBack -Dsonar.host.url=http://localhost:9000 -Dsonar.login=6e8fca50937b291c2b950223d5e4b36754140fa8 -Dsonar.java.binaries=target -Dsonar.coverage.exclusions=**/model/**,**Application.java,**/src/test/**"
+                    sh "${scannerHome}/bin/sonar-scanner -e -Dsonar.projectKey=TestDeployBack -Dsonar.host.url=http://localhost:9000 -Dsonar.login=c002f2434f52a2faa29aa0b60b398e5e03463bdb -Dsonar.java.binaries=target -Dsonar.coverage.exclusions=**/model/**,**Application.java,**/src/test/**"
                 }
             }
 
@@ -60,14 +60,14 @@ pipeline {
                 }
             }
         }
-        stage('Functional Tests'){
-            steps {
-                dir('funcional-test'){
-                    git branch: 'master', credentialsId: 'GitHubLogin', url: 'git@github.com:Greeis/tasks-funcional-tests.git'
-                    sh "${mavenHome}/bin/mvn test"
-                }
-            }
-        }
+        // stage('Functional Tests'){
+        //     steps {
+        //         dir('funcional-test'){
+        //             git branch: 'master', credentialsId: 'GitHubLogin', url: 'git@github.com:Greeis/tasks-funcional-tests.git'
+        //             sh "${mavenHome}/bin/mvn test"
+        //         }
+        //     }
+        // }
         stage('Deploy Prod'){
             steps {
                 sh '/usr/bin/docker-compose build'
