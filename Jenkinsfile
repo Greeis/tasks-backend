@@ -61,14 +61,14 @@ pipeline {
                 }
             }
         }
-        // stage('Functional Tests'){
-        //     steps {
-        //         dir('funcional-test'){
-        //             git branch: 'master', credentialsId: 'GitHubLogin', url: 'git@github.com:Greeis/tasks-funcional-tests.git'
-        //             sh "${mavenHome}/bin/mvn test"
-        //         }
-        //     }
-        // }
+        stage('Functional Tests'){
+            steps {
+                dir('funcional-test'){
+                    git branch: 'master', credentialsId: 'GitHubLogin', url: 'git@github.com:Greeis/tasks-funcional-tests.git'
+                    sh "${mavenHome}/bin/mvn test"
+                }
+            }
+        }
         stage('Deploy Prod'){
             steps {
                 sh '/usr/local/bin/docker-compose build'
