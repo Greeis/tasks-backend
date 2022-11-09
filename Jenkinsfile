@@ -89,10 +89,10 @@ pipeline {
             junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml, api-test/target/surefire-reports/*.xml, funcional-test/target/surefire-reports/*.xml, funcional-test/target/failsafe-reports/*.xml'
             archiveArtifacts artifacts: 'target/tasks-backend.war, front-end/target/tasks.war', followSymlinks: false, onlyIfSuccessful: true
         }
-        unsuccessful{
+        unsuccessful {
             emailext attachLog: true, body: 'See the attached log below', subject: 'Build $BUILD_NUMBER has failed', to: 'graziele_182+jenkins@hotmail.com'
         }
-        fixed{
+        fixed {
             emailext attachLog: true, body: 'See the attached log below', subject: 'Build is fine!!', to: 'graziele_182+jenkins@hotmail.com'
         }
     }
