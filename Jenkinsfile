@@ -91,10 +91,10 @@ pipeline {
             archiveArtifacts artifacts: 'target/tasks-backend.war, front-end/target/tasks.war', followSymlinks: false, onlyIfSuccessful: true
         }
         unsuccessful {
-            emailext attachLog: true, charset: 'UTF-8', body: 'See the attached log below', subject: 'Build $BUILD_NUMBER has failed', to: 'graziele_182@hotmail.com'
+            emailext attachLog: true, body: 'See the attached log below', subject: 'Build $BUILD_NUMBER has failed', to: 'graziele_182@hotmail.com'
         }
         fixed {
-            emailext attachLog: true, charset: 'UTF-8', body: 'See the attached log below', subject: 'Build is fine!!', to: 'graziele_182@hotmail.com'
+            emailext attachLog: true, body: 'See the attached log below', subject: 'Build is fine!!', to: 'graziele_182@hotmail.com'
         }
     }
 }
