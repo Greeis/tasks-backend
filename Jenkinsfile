@@ -63,6 +63,7 @@ pipeline {
         }
         stage('Functional Tests'){
             steps {
+                sleep(10)
                 dir('funcional-test'){
                     git branch: 'master', credentialsId: 'GitHubLogin', url: 'git@github.com:Greeis/tasks-funcional-tests.git'
                     sh "${mavenHome}/bin/mvn test"
